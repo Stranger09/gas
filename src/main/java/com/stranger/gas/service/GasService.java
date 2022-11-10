@@ -1,4 +1,4 @@
-package com.stranger.gas.services;
+package com.stranger.gas.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
