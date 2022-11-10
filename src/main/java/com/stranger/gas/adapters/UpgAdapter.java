@@ -1,9 +1,12 @@
 package com.stranger.gas.adapters;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.stranger.gas.model.GasTypeInfo;
+import com.stranger.gas.model.Station;
 import com.stranger.gas.model.upg.UpgStation;
 import com.stranger.gas.model.wog.WogStation;
 import lombok.SneakyThrows;
@@ -16,15 +19,14 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 
-@Component
+//@Component
 public class UpgAdapter implements Adapter {
 
     private static final int MAGIC_ELEMENT_ID = 404;
+    private static final String BRAND_NAME = "UPG";
 
     @SneakyThrows
-    @Cacheable(value = "upgCache")
-    @Scheduled(fixedDelay = 1000000)
-    public List<UpgStation> getUpgGasStationInfo() {
+    private List<UpgStation> getUpgGasStationInfo() {
 
         String url = "https://upg.ua/merezha_azk/";
         Document doc = Jsoup.connect(url).get();
@@ -54,7 +56,22 @@ public class UpgAdapter implements Adapter {
     }
 
     @Override
-    public List<WogStation> getGasStationInfo() {
-        return List.of();
+    @Cacheable(value = "upgCache")
+    @Scheduled(fixedDelay = 1000000)
+    public List<Station> getGasStationInfo() {
+        return getAllStationInfo();
+    }
+
+    private List<Station> getAllStationInfo() {
+        List<UpgStation> gasStationInfo = getUpgGasStationInfo();
+        return gasStationInfo.stream().map(upg -> new Station(BRAND_NAME, getGasTypeInfo(upg), upg.region, upg.address)).collect(Collectors.toList());
+    }
+
+    private List<GasTypeInfo> getGasTypeInfo(UpgStation upg) {
+
+        return upg.fuelsAsArray
+            .stream()
+            .map(gas -> new GasTypeInfo(gas.title, true, gas.price))
+            .collect(Collectors.toList());
     }
 }

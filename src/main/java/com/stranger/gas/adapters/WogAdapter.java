@@ -2,9 +2,12 @@ package com.stranger.gas.adapters;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.stranger.gas.model.GasTypeInfo;
+import com.stranger.gas.model.Station;
 import com.stranger.gas.model.wog.WogStation;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -18,20 +21,36 @@ import org.springframework.web.client.RestTemplate;
 @EnableCaching
 @Component
 public class WogAdapter implements Adapter{
-    @Override
+
+    private static final String BRAND_NAME = "WOG";
+
     @SneakyThrows
-    @Cacheable(value = "wogCache")
-    @Scheduled(fixedDelay = 100000)
-    public List<WogStation> getGasStationInfo() {
+    private List<WogStation> getWogGasStationInfo() {
         String url = "https://api.wog.ua/fuel_stations";
         RestTemplate restTemplate = new RestTemplate();
 
         Object response = restTemplate.getForObject(url, Object.class);
 
-        log.info("we're inside wog adapter");
-
         List<WogStation> wogStations = parseResponseToGasStationInfo(response);
         return wogStations;
+    }
+    @Override
+    @Cacheable(value = "wogCache")
+    @Scheduled(fixedDelay = 100000)
+    public List<Station> getGasStationInfo() {
+        return getAllStationInfo();
+    }
+
+    private List<Station> getAllStationInfo() {
+        List<WogStation> gasStationInfo = getWogGasStationInfo();
+        return gasStationInfo
+            .stream()
+            .map(wog -> new Station(BRAND_NAME, getGasTypeInfo(wog), wog.getCity(), wog.getCity())).collect(Collectors.toList());
+    }
+
+    private List<GasTypeInfo> getGasTypeInfo(WogStation wog) {
+
+        return List.of(new GasTypeInfo("Stub", true, 50.0));
     }
 
     @SneakyThrows

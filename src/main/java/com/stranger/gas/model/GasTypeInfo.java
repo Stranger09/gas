@@ -1,13 +1,11 @@
 package com.stranger.gas.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Value;
 
-@AllArgsConstructor
-@Data
+@Value
 public class GasTypeInfo {
 
     String type;
     boolean isAvailable;
-    int price;
+    double price;
 }

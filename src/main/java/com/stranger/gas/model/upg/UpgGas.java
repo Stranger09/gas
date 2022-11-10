@@ -14,5 +14,5 @@ public class UpgGas {
     @JsonProperty("Title")
     public String title;
     @JsonProperty("Price")
-    public String price;
+    public double price;
 }

@@ -9,5 +9,7 @@ public class Station {
 
     String brandName;
     List<GasTypeInfo> gasTypeInfo;
+    String city;
+    String address;
 
 }
