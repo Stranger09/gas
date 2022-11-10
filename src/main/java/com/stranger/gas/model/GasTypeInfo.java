@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class GasTypeInfo {
 
-    String name;
+    String type;
     boolean isAvailable;
     int price;
 }

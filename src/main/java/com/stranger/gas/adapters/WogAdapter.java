@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.stranger.gas.model.Station;
+import com.stranger.gas.model.wog.WogStation;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
@@ -21,8 +21,8 @@ public class WogAdapter implements Adapter{
     @Override
     @SneakyThrows
     @Cacheable(value = "wogCache")
-    @Scheduled(fixedDelay = 1000000000)
-    public List<Station> getGasStationInfo() {
+    @Scheduled(fixedDelay = 100000)
+    public List<WogStation> getGasStationInfo() {
         String url = "https://api.wog.ua/fuel_stations";
         RestTemplate restTemplate = new RestTemplate();
 
@@ -30,12 +30,12 @@ public class WogAdapter implements Adapter{
 
         log.info("we're inside wog adapter");
 
-        List<Station> stations = parseResponseToGasStationInfo(response);
-        return stations;
+        List<WogStation> wogStations = parseResponseToGasStationInfo(response);
+        return wogStations;
     }
 
     @SneakyThrows
-    private List<Station> parseResponseToGasStationInfo(Object response) {
+    private List<WogStation> parseResponseToGasStationInfo(Object response) {
 
         ObjectMapper mapper = new ObjectMapper();
 

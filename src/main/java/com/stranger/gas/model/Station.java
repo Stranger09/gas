@@ -1,20 +1,13 @@
 package com.stranger.gas.model;
 
-import java.util.HashMap;
+import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Value;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
+@Value
 public class Station {
 
-    String link;
-    String city;
-    HashMap<String, Double> coordinates;
-    String name;
-    int id;
+    String brandName;
+    List<GasTypeInfo> gasTypeInfo;
 
 }

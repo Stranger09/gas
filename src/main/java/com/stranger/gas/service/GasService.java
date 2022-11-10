@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 import com.stranger.gas.adapters.UpgAdapter;
 import com.stranger.gas.adapters.WogAdapter;
-import com.stranger.gas.model.Station;
+import com.stranger.gas.model.wog.WogStation;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,16 +19,16 @@ public class GasService {
     @Autowired
     UpgAdapter upgAdapter;
 
-    public List<Station> getAllWogStationInfo() {
+    public List<WogStation> getAllWogStationInfo() {
         log.info("we're inside gas service");
         return wogAdapter.getGasStationInfo();
     }
 
-    public List<Station> getAllStationByCity(String city) {
+    public List<WogStation> getAllStationByCity(String city) {
 
-        List<Station> gasStationInfo = wogAdapter.getGasStationInfo();
+        List<WogStation> gasWogStationInfo = wogAdapter.getGasStationInfo();
 
-        return gasStationInfo.stream().filter(station -> station.getCity().equals(city)).collect(Collectors.toList());
+        return gasWogStationInfo.stream().filter(station -> station.getCity().equals(city)).collect(Collectors.toList());
     }
 
 }
