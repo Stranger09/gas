@@ -1,11 +1,13 @@
 package com.stranger.gas.model;
 
-import lombok.Value;
+import lombok.Builder;
+import lombok.Data;
 
 import javax.persistence.*;
 
-@Value
 @Entity
+@Data
+@Builder
 public class Station {
 
     @Id
@@ -16,6 +18,6 @@ public class Station {
     private String name;
     private String address;
     private String city;
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.ALL})
     private StationInfo stationInfo;
 }

@@ -18,7 +18,7 @@ public class Fuel {
     private double price;
     private boolean isAvailable;
 
-    enum FuelType {
-        A92, A95, DIESEL, GAS;
+    public enum FuelType {
+        A92, A95, DIESEL, GAS, UNKNOWN;
     }
 }

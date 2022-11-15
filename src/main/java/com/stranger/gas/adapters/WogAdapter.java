@@ -2,6 +2,8 @@ package com.stranger.gas.adapters;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.stranger.gas.mapper.WogMapper;
+import com.stranger.gas.model.Station;
 import com.stranger.gas.model.wog.WogFuelFilter;
 import com.stranger.gas.model.wog.WogStation;
 import com.stranger.gas.model.wog.WogStationInfo;
@@ -9,64 +11,43 @@ import com.stranger.gas.scrapper.WogScrapper;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @EnableCaching
-@Component
-public class WogAdapter{
+@Component("wogAdapter")
+public class WogAdapter implements Adapter {
     private WogScrapper wogScrapper;
-    private ObjectMapper mapper = new ObjectMapper();
+    private ObjectMapper objectMapper;
+    private WogMapper wogMapper;
 
-    public WogAdapter(WogScrapper wogScrapper) {
+    public WogAdapter(WogScrapper wogScrapper, WogMapper wogMapper) {
         this.wogScrapper = wogScrapper;
+        this.wogMapper = wogMapper;
+        this.objectMapper = new ObjectMapper();
     }
 
-    private static final String BRAND_NAME = "WOG";
+    @Override
+    public List<Station> collectInfo() {
+        List<WogFuelFilter> allWogFuelFilters = getAllWogFuelFilters();
+        wogMapper.setFuelFilters(allWogFuelFilters);
 
-    public void collectWogInfo() {
+        List<WogStation> allStations = getAllWogStations();
 
-    }
-
-    @Scheduled(fixedDelay = 1000000)
-    public List<WogStation> getAllStations() {
-        List<WogStation> allWogStations = getAllWogStations();
-               /* allWogStations.stream().forEach(System.out::println);
-*/
-        return allWogStations;
-    }
-
-    @Scheduled(fixedDelay = 1000000)
-    public List<WogFuelFilter> getAllFuelFilters() {
-        getAllWogFuelFilters()
-        .stream()/*.forEach(System.out::println)*/;
-
-        return new ArrayList<>();
-    }
-
-    @Scheduled(fixedDelay = 1000000)
-    public List<WogStationInfo> getStationInfo() {
-        getAllWogStations()
-                .stream()
-                .map(WogStation::getLink)
-                .limit(1)
-                .forEach(link -> {
-                    WogStationInfo wogStationInfo = getWogStationInfo(link);
-                    /*System.out.println(wogStationInfo);*/
-                });
-
-        return new ArrayList<>();
+        return allStations.stream()
+                .map(wogStation -> getWogStationInfo(wogStation.getLink()))
+                .map(wogStationInfo -> wogMapper.mapStation(wogStationInfo))
+                .collect(Collectors.toList());
     }
 
     @SneakyThrows
     private List<WogStation> getAllWogStations() {
         Object allStationsInfo = wogScrapper.retrieveStations();
 
-        List<WogStation> wogStations = mapper.convertValue(allStationsInfo, new TypeReference<>() {
+        List<WogStation> wogStations = objectMapper.convertValue(allStationsInfo, new TypeReference<>() {
         });
 
         return wogStations;
@@ -76,7 +57,7 @@ public class WogAdapter{
     private List<WogFuelFilter> getAllWogFuelFilters() {
         Object allFuelFiltersInfo = wogScrapper.retrieveFuelFilters();
 
-        List<WogFuelFilter> wogFuelFilters = mapper.convertValue(allFuelFiltersInfo, new TypeReference<>() {
+        List<WogFuelFilter> wogFuelFilters = objectMapper.convertValue(allFuelFiltersInfo, new TypeReference<>() {
         });
 
         return wogFuelFilters;
@@ -87,7 +68,7 @@ public class WogAdapter{
     public WogStationInfo getWogStationInfo(String stationLink) {
         Object stationInfo = wogScrapper.retrieveStationInfo(stationLink);
 
-        WogStationInfo wogStationInfo = mapper.convertValue(stationInfo, new TypeReference<>() {
+        WogStationInfo wogStationInfo = objectMapper.convertValue(stationInfo, new TypeReference<>() {
         });
 
         return wogStationInfo;

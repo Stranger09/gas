@@ -22,7 +22,7 @@ public class StationController {
     private WogAdapter wogAdapter;
 
 
-    @GetMapping(value = "/station/all")
+   /* @GetMapping(value = "/station/all")
     public List<Station> getAllStations() {
         wogAdapter.getAllStations();
         return new ArrayList<>();
@@ -58,7 +58,7 @@ public class StationController {
                             .forEach(System.out::println);
                 });
         return new ArrayList<>();
-    }
+    }*/
 
     /*@SneakyThrows
     @GetMapping(value = "/station/all/city")
