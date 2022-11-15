@@ -1,15 +1,21 @@
 package com.stranger.gas.model;
 
-import java.util.List;
-
 import lombok.Value;
 
+import javax.persistence.*;
+
 @Value
+@Entity
 public class Station {
 
-    String brandName;
-    List<GasTypeInfo> gasTypeInfo;
-    String city;
-    String address;
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @ManyToOne
+    private Company company;
+    private String name;
+    private String address;
+    private String city;
+    @OneToOne
+    private StationInfo stationInfo;
 }

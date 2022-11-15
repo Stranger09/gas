@@ -1,23 +1,18 @@
 package com.stranger.gas.service;
 
+import com.stranger.gas.adapters.Adapter;
+import com.stranger.gas.model.Station;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.stranger.gas.adapters.Adapter;
-import com.stranger.gas.adapters.UpgAdapter;
-import com.stranger.gas.adapters.WogAdapter;
-import com.stranger.gas.model.Station;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import static org.springframework.util.ClassUtils.getUserClass;
-
 @Service
-public class GasService {
+public class StationServiceImpl implements StationService {
 
-    @Autowired
+    /*@Autowired
     List<Adapter> allAdapters;
 
     //TODO: need extract class name to external property
@@ -35,14 +30,13 @@ public class GasService {
         return collect;
     }
 
-    public List<Station> getAllStationInfo() {
-
+    @Override
+    public List<Station> getAllStations() {
         List<Station> collect = allAdapters
-            .stream()
-            .map(Adapter::getGasStationInfo)
-            .flatMap(Collection::stream)
-            .collect(Collectors.toList());
+                .stream()
+                .map(Adapter::getAllStations)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
         return collect;
-    }
-
+    }*/
 }

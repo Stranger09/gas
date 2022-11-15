@@ -7,6 +7,6 @@ import com.stranger.gas.model.wog.WogStation;
 
 public interface Adapter {
 
-    List<Station> getGasStationInfo();
+/*    List<Station> getAllStations();*/
 
 }
