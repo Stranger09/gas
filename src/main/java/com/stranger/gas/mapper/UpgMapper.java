@@ -20,13 +20,11 @@ public class UpgMapper {
 
     public UpgMapper(CompanyRepository companyRepository) {
         this.companyRepository = companyRepository;
-        //TODO in BD company isn`t setted
-        this.upgCompany = companyRepository.getByName(BRAND_NAME);
     }
 
     public Station mapStation(UpgStation upgStation) {
         return Station.builder()
-                .company(this.upgCompany)
+                .company(getCompany())
                 .name(upgStation.getFullName())
                 .address(upgStation.getAddress())
                 .city(mapCity(upgStation.getRegion()))
@@ -96,4 +94,12 @@ public class UpgMapper {
 
        return fuelType;
    }
+
+    private Company getCompany() {
+        if (this.upgCompany == null) {
+            this.upgCompany = this.companyRepository.getByName(BRAND_NAME);
+        }
+
+        return this.upgCompany;
+    }
 }

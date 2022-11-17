@@ -26,7 +26,6 @@ public class WogMapper {
 
     public WogMapper(CompanyRepository companyRepository) {
         this.companyRepository = companyRepository;
-        this.wogCompany = companyRepository.getByName(BRAND_NAME);
     }
 
     public Station mapStation(WogStationInfo wogStationInfo) {
@@ -34,7 +33,7 @@ public class WogMapper {
                 .city(wogStationInfo.getCity())
                 .name(mapStationName(wogStationInfo.getId()))
                 .address(wogStationInfo.getName())
-                .company(this.wogCompany)
+                .company(getCompany())
                 .stationInfo(mapStationInfo(wogStationInfo))
                 .build();
     }
@@ -129,5 +128,13 @@ public class WogMapper {
         }
 
         return fuelType;
+    }
+
+    private Company getCompany() {
+        if (this.wogCompany == null) {
+            this.wogCompany = this.companyRepository.getByName(BRAND_NAME);
+        }
+
+        return this.wogCompany;
     }
 }
