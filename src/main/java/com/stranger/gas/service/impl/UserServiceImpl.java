@@ -20,16 +20,16 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
+   /* private PasswordEncoder passwordEncoder;*/
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository/*, PasswordEncoder passwordEncoder*/) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+/*        this.passwordEncoder = passwordEncoder;*/
     }
 
     @Override
     public User create(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+       /* user.setPassword(passwordEncoder.encode(user.getPassword()));*/
         return userRepository.save(user);
     }
 

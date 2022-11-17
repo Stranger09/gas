@@ -1,77 +1,77 @@
 package com.stranger.gas.adapters;
 
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.stranger.gas.model.GasTypeInfo;
+import com.stranger.gas.mapper.WogMapper;
 import com.stranger.gas.model.Station;
+import com.stranger.gas.model.wog.WogFuelFilter;
 import com.stranger.gas.model.wog.WogStation;
+import com.stranger.gas.model.wog.WogStationInfo;
+import com.stranger.gas.scrapper.WogScrapper;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @EnableCaching
-@Component
-public class WogAdapter implements Adapter{
+@Component("wogAdapter")
+public class WogAdapter implements Adapter {
+    private WogScrapper wogScrapper;
+    private ObjectMapper objectMapper;
+    private WogMapper wogMapper;
 
-    private static final String BRAND_NAME = "WOG";
+    public WogAdapter(WogScrapper wogScrapper, WogMapper wogMapper) {
+        this.wogScrapper = wogScrapper;
+        this.wogMapper = wogMapper;
+        this.objectMapper = new ObjectMapper();
+    }
+
+    @Override
+    public List<Station> collectInfo() {
+        List<WogFuelFilter> allWogFuelFilters = getAllWogFuelFilters();
+        wogMapper.setFuelFilters(allWogFuelFilters);
+
+        List<WogStation> allStations = getAllWogStations();
+
+        return allStations.stream()
+                .map(wogStation -> getWogStationInfo(wogStation.getLink()))
+                .map(wogStationInfo -> wogMapper.mapStation(wogStationInfo))
+                .collect(Collectors.toList());
+    }
 
     @SneakyThrows
-    private List<WogStation> getWogGasStationInfo() {
-        String url = "https://api.wog.ua/fuel_stations";
-        RestTemplate restTemplate = new RestTemplate();
+    private List<WogStation> getAllWogStations() {
+        Object allStationsInfo = wogScrapper.retrieveStations();
 
-        Object response = restTemplate.getForObject(url, Object.class);
+        List<WogStation> wogStations = objectMapper.convertValue(allStationsInfo, new TypeReference<>() {
+        });
 
-        List<WogStation> wogStations = parseResponseToGasStationInfo(response);
         return wogStations;
     }
-    @Override
-    @Cacheable(value = "wogCache")
-    @Scheduled(fixedDelay = 100000)
-    public List<Station> getGasStationInfo() {
-        return getAllStationInfo();
-    }
-
-    private List<Station> getAllStationInfo() {
-        List<WogStation> gasStationInfo = getWogGasStationInfo();
-        return gasStationInfo
-            .stream()
-            .map(wog -> new Station(BRAND_NAME, getGasTypeInfo(wog), wog.getCity(), wog.getCity())).collect(Collectors.toList());
-    }
-
-    private List<GasTypeInfo> getGasTypeInfo(WogStation wog) {
-
-        return List.of(new GasTypeInfo("Stub", true, 50.0));
-    }
 
     @SneakyThrows
-    private List<WogStation> parseResponseToGasStationInfo(Object response) {
+    private List<WogFuelFilter> getAllWogFuelFilters() {
+        Object allFuelFiltersInfo = wogScrapper.retrieveFuelFilters();
 
-        ObjectMapper mapper = new ObjectMapper();
+        List<WogFuelFilter> wogFuelFilters = objectMapper.convertValue(allFuelFiltersInfo, new TypeReference<>() {
+        });
 
-        Object data = getObject(mapper, response, "data");
-
-        Object stations = getObject(mapper, data, "stations");
-
-        return mapper.convertValue(stations, new TypeReference<>() {});
+        return wogFuelFilters;
     }
+
 
     @SneakyThrows
-    private Object getObject(ObjectMapper mapper, Object objFromJson, String fieldInJson) {
-        String json = mapper.writeValueAsString(objFromJson);
+    public WogStationInfo getWogStationInfo(String stationLink) {
+        Object stationInfo = wogScrapper.retrieveStationInfo(stationLink);
 
-        Map<String, Object> objectMap
-            = mapper.readValue(json, new TypeReference<>(){});
+        WogStationInfo wogStationInfo = objectMapper.convertValue(stationInfo, new TypeReference<>() {
+        });
 
-        return objectMap.get(fieldInJson);
+        return wogStationInfo;
     }
+
 }

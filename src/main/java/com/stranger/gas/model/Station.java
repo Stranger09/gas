@@ -1,15 +1,23 @@
 package com.stranger.gas.model;
 
-import java.util.List;
+import lombok.Builder;
+import lombok.Data;
 
-import lombok.Value;
+import javax.persistence.*;
 
-@Value
+@Entity
+@Data
+@Builder
 public class Station {
 
-    String brandName;
-    List<GasTypeInfo> gasTypeInfo;
-    String city;
-    String address;
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @ManyToOne
+    private Company company;
+    private String name;
+    private String address;
+    private String city;
+    @OneToOne(cascade = {CascadeType.ALL})
+    private StationInfo stationInfo;
 }
