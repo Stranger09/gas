@@ -1,14 +1,18 @@
 package com.stranger.gas.controller;
 
 import com.stranger.gas.adapters.WogAdapter;
+import com.stranger.gas.model.Filter;
 import com.stranger.gas.model.Station;
 import com.stranger.gas.model.StationInfo;
 import com.stranger.gas.model.wog.WogStation;
 import com.stranger.gas.model.wog.WogStationInfo;
+import com.stranger.gas.service.StationServiceImpl;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -17,9 +21,8 @@ import java.util.List;
 @RestController
 public class StationController {
 
-
     @Autowired
-    private WogAdapter wogAdapter;
+    StationServiceImpl stationService;
 
 
    /* @GetMapping(value = "/station/all")
@@ -60,15 +63,16 @@ public class StationController {
         return new ArrayList<>();
     }*/
 
-    /*@SneakyThrows
-    @GetMapping(value = "/station/all/city")
-    public List<Station> getStationsByCity(@RequestParam String city) {
-        return gasService.getAllStationByCity(city);
+    @SneakyThrows
+    @GetMapping(value = "/station/filter")
+    public List<Station> getStationsByCity(@RequestBody Filter filters) {
+
+        return stationService.filter(filters);
     }
 
-    @SneakyThrows
-    @GetMapping(value = "/station/all/fuel")
-    public List<Station> getStationsByFuel(@RequestParam String city) {
-        return gasService.getAllStationByCity(city);
-    }*/
+//    @SneakyThrows
+//    @GetMapping(value = "/station/all/fuel")
+//    public List<Station> getStationsByFuel(@RequestParam String city) {
+//        return gasService.getAllStationByCity(city);
+//    }
 }
