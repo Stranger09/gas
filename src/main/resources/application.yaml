@@ -1,24 +1,3 @@
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/fuel
-    username: postgres
-    password: 1234
-  jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQL9Dialect
-    hibernate:
-      ddl-auto: create-drop
-    defer-datasource-initialization: true
-  data:
-    jpa:
-      repositories:
-        bootstrap-mode: default
-  main:
-    allow-circular-references: true
-server:
-  port: 8080
-
 station:
   links:
     wog: "https://api.wog.ua/fuel_stations"
