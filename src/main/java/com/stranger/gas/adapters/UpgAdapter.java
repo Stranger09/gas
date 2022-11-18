@@ -1,6 +1,5 @@
 package com.stranger.gas.adapters;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,8 +11,10 @@ import com.stranger.gas.model.upg.UpgStation;
 import com.stranger.gas.scrapper.impl.UpgScrapperImpl;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component("upgAdapter")
 @AllArgsConstructor
 public class UpgAdapter implements Adapter {
@@ -25,6 +26,12 @@ public class UpgAdapter implements Adapter {
     @Override
     public List<Station> collectInfo() {
         return getAllUpgStations().stream().map(upgMapper::mapStation).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Station> recoverCollectInfo(Exception e, String sql) {
+        log.error("Wog adapter wasn't process data correctly");
+        return Adapter.super.recoverCollectInfo(e, sql);
     }
 
 

@@ -41,6 +41,12 @@ public class WogAdapter implements Adapter {
             .collect(Collectors.toList());
     }
 
+    @Override
+    public List<Station> recoverCollectInfo(Exception e, String sql) {
+        log.error("Wog adapter wasn't process data correctly");
+        return Adapter.super.recoverCollectInfo(e, sql);
+    }
+
     @SneakyThrows
     private List<WogStation> getAllWogStations() {
         Object allStationsInfo = wogScrapper.retrieveStations();
