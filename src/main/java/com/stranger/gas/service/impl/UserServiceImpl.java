@@ -3,11 +3,11 @@ package com.stranger.gas.service.impl;
 import com.stranger.gas.model.User;
 import com.stranger.gas.repository.UserRepository;
 import com.stranger.gas.service.UserService;
-import org.springframework.security.core.GrantedAuthority;
+/*import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;*/
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
-    @Override
+   /* @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(userName);
         if (user == null) {
@@ -63,13 +63,13 @@ public class UserServiceImpl implements UserService {
         }
         return new org.springframework.security.core.userdetails.User(user.getEmail(),
                 user.getPassword(), getAuthorities());
-    }
+    }*/
 
-    private Collection<? extends GrantedAuthority> getAuthorities() {
+  /*  private Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> list = new ArrayList<>();
         list.add(new SimpleGrantedAuthority("ROLE_USER"));
         return list;
-    }
+    }*/
 
     public boolean isUniqueUsername(String email) {
         return userRepository.findByEmail(email) == null;
