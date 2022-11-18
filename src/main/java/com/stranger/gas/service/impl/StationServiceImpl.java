@@ -6,25 +6,21 @@ import com.stranger.gas.model.StationInfo;
 import com.stranger.gas.repository.StationRepository;
 import com.stranger.gas.service.FilterService;
 import com.stranger.gas.service.StationService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+
 @Service
+@AllArgsConstructor
 public class StationServiceImpl implements StationService {
+
     private StationRepository stationRepository;
     private FilterService filterService;
 
-    public StationServiceImpl(StationRepository stationRepository, FilterService filterService) {
-        this.stationRepository = stationRepository;
-        this.filterService = filterService;
-    }
-
     public List<Station> filter(Filter filter) {
-
-        List<Station> stations = getAllStations();
-
-        return filterService.filter(stations, filter);
+        return filterService.filter(filter);
     }
 
     @Override
