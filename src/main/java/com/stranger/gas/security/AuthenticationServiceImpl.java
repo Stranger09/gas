@@ -1,9 +1,8 @@
-package com.stranger.gas.security;
+/*package com.stranger.gas.security;
 
 import com.stranger.gas.model.User;
 import com.stranger.gas.service.UserService;
 import org.springframework.stereotype.Service;
-
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
     private UserService userService;
@@ -22,4 +21,4 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user = userService.create(user);
         return user;
     }
-}
+}*/

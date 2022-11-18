@@ -2,6 +2,7 @@ package com.stranger.gas.mapper;
 
 import com.stranger.gas.model.Company;
 import com.stranger.gas.model.Fuel;
+import com.stranger.gas.model.Fuel.FuelType;
 import com.stranger.gas.model.Station;
 import com.stranger.gas.model.StationInfo;
 import com.stranger.gas.model.wog.Schedule;
@@ -107,21 +108,21 @@ public class WogMapper {
         return result;
     }
 
-    Fuel.FuelType mapFuelType(String name) {
-        Fuel.FuelType fuelType = Fuel.FuelType.UNKNOWN;
+    FuelType mapFuelType(String name) {
+        FuelType fuelType = FuelType.UNKNOWN;
 
         switch (name) {
             case "92":
-                fuelType = Fuel.FuelType.A92;
+                fuelType = FuelType.A92;
                 break;
             case "95":
-                fuelType = Fuel.FuelType.A95;
+                fuelType = FuelType.A95;
                 break;
             case "ДП":
-                fuelType = Fuel.FuelType.DIESEL;
+                fuelType = FuelType.DIESEL;
                 break;
             case "ГАЗ":
-                fuelType = Fuel.FuelType.GAS;
+                fuelType = FuelType.GAS;
                 break;
             default:
                 break;

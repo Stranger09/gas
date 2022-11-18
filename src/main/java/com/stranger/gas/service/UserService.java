@@ -1,9 +1,9 @@
 package com.stranger.gas.service;
 
 import com.stranger.gas.model.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
+/*import org.springframework.security.core.userdetails.UserDetailsService;*/
 
-public interface UserService extends UserDetailsService {
+public interface UserService /*extends UserDetailsService*/ {
     User get(Long id);
 
     User update(User user);

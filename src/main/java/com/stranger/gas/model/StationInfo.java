@@ -2,12 +2,12 @@ package com.stranger.gas.model;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
 @Entity
 @Builder
 public class StationInfo {
@@ -22,4 +22,55 @@ public class StationInfo {
     @ManyToMany(cascade = {CascadeType.ALL})
     private List<Fuel> fuels;
     private LocalDateTime lastUpdate;
+
+    public StationInfo(Long id, String schedule, String workDescription, List<Fuel> fuels, LocalDateTime lastUpdate) {
+        this.id = id;
+        this.schedule = schedule;
+        this.workDescription = workDescription;
+        this.fuels = fuels;
+        this.lastUpdate = lastUpdate;
+    }
+
+    public StationInfo() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(String schedule) {
+        this.schedule = schedule;
+    }
+
+    public String getWorkDescription() {
+        return workDescription;
+    }
+
+    public void setWorkDescription(String workDescription) {
+        this.workDescription = workDescription;
+    }
+
+    public List<Fuel> getFuels() {
+        return fuels;
+    }
+
+    public void setFuels(List<Fuel> fuels) {
+        this.fuels = fuels;
+    }
+
+    public LocalDateTime getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(LocalDateTime lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
 }
