@@ -9,7 +9,6 @@ import com.stranger.gas.model.Station;
 import com.stranger.gas.repository.StationRepository;
 import com.stranger.gas.service.matcher.Matcher;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,7 +22,7 @@ public class FilterService {
 
 
 //    @Scheduled(fixedDelay = 100)
-    private void method(){
+    private void method() {
         List<Station> вінниця = filter(Filter.builder().city("Дніпро").build());
         System.out.println("");
     }

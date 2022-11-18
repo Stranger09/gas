@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import com.stranger.gas.scrapper.Scrapper;
 import lombok.SneakyThrows;
-import org.jetbrains.annotations.NotNull;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -40,7 +39,6 @@ public class UpgScrapperImpl implements Scrapper {
         return getUpgStationJson(rowStationJson);
     }
 
-    @NotNull
     private static List<Element> getScriptElements(Elements allElements) {
         return allElements.stream()
             .map(element -> element.getElementsByTag(SCRIPT_TAG)).collect(Collectors.toList())
@@ -58,17 +56,13 @@ public class UpgScrapperImpl implements Scrapper {
     private String getUpgStationJson(String element) {
 
         String substring = getSubstring(element, "\"data\":", "var map");
-        if (substring != null) {
-            return getSubstring(substring, "[{\"id\"", ",\"update\":[]};");
-        }
-        return null;
+
+        return getSubstring(substring, "[{\"id\"", ",\"update\":[]};");
     }
 
     private String getSubstring(String nodeString, String startSubStr, String endSubStr) {
 
-        if (nodeString.contains(startSubStr) && nodeString.contains(endSubStr)) {
-            return nodeString.substring(nodeString.indexOf(startSubStr), nodeString.indexOf(endSubStr));
-        }
-        return null;
+
+        return nodeString.substring(nodeString.indexOf(startSubStr), nodeString.indexOf(endSubStr));
     }
 }

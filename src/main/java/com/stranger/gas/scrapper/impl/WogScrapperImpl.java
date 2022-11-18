@@ -6,7 +6,6 @@ import com.stranger.gas.scrapper.WogScrapper;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -27,11 +26,7 @@ public class WogScrapperImpl implements WogScrapper {
     public Object retrieveStations() {
         ResponseEntity<Object> rawResponse = restTemplate.getForEntity(WOG_STATIONS_URL, Object.class);
 
-        if (rawResponse.getStatusCode().is2xxSuccessful()) {
-            return parseRowResponseToAllStationsResponse(rawResponse.getBody());
-        }
-
-        return null;
+        return parseRowResponseToAllStationsResponse(rawResponse.getBody());
     }
 
     @Override

@@ -1,3 +1,4 @@
-spring:
-  main:
-    allow-circular-references: true
+station:
+  links:
+    wog: "https://api.wog.ua/fuel_stations"
+    upg: "https://upg.ua/merezha_azk/"

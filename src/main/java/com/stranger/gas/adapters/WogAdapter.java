@@ -43,31 +43,22 @@ public class WogAdapter implements Adapter {
 
     @SneakyThrows
     private List<WogStation> getAllWogStations() {
-
         Object allStationsInfo = wogScrapper.retrieveStations();
 
-        if (allStationsInfo == null) {
-            return Collections.emptyList();
-        }
-
-        return objectMapper.convertValue(allStationsInfo, new TypeReference<>() {
-        });
+        return objectMapper.convertValue(allStationsInfo, new TypeReference<>() {});
     }
 
     @SneakyThrows
     private List<WogFuelFilter> getAllWogFuelFilters() {
         Object allFuelFiltersInfo = wogScrapper.retrieveFuelFilters();
 
-        return objectMapper.convertValue(allFuelFiltersInfo, new TypeReference<>() {
-        });
+        return objectMapper.convertValue(allFuelFiltersInfo, new TypeReference<>() {});
     }
 
     @SneakyThrows
     public WogStationInfo getWogStationInfo(String stationLink) {
         Object stationInfo = wogScrapper.retrieveStationInfo(stationLink);
 
-        return objectMapper.convertValue(stationInfo, new TypeReference<>() {
-        });
+        return objectMapper.convertValue(stationInfo, new TypeReference<>() {});
     }
-
 }
