@@ -1,5 +1,9 @@
 package com.stranger.gas.adapters;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stranger.gas.mapper.UpgMapper;
@@ -11,9 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @EnableCaching
@@ -33,9 +34,9 @@ public class UpgAdapter implements Adapter {
     @Override
     public List<Station> collectInfo() {
         return getAllUpgStations()
-                .stream()
-                .map(upgStation -> upgMapper.mapStation(upgStation))
-                .collect(Collectors.toList());
+            .stream()
+            .map(upgStation -> upgMapper.mapStation(upgStation))
+            .collect(Collectors.toList());
     }
 
 
@@ -43,8 +44,11 @@ public class UpgAdapter implements Adapter {
     private List<UpgStation> getAllUpgStations() {
         String upgStationsInJson = (String) scrapper.retrieveStations();
 
-        List<UpgStation> upgStations = objectMapper.readValue(upgStationsInJson, new TypeReference<>() {
+        if (upgStationsInJson == null) {
+            return Collections.emptyList();
+        }
+
+        return objectMapper.readValue(upgStationsInJson, new TypeReference<>() {
         });
-        return upgStations;
     }
 }
