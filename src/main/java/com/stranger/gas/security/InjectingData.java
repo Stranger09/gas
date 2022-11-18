@@ -11,18 +11,17 @@ import javax.annotation.PostConstruct;
 @Component
 public class InjectingData {
     private UserService userService;
-    private AuthenticationService authenticationService;
+   /* private AuthenticationService authenticationService;*/
     private CompanyRepository companyRepository;
 
-    public InjectingData(UserService userService, AuthenticationService authenticationService, CompanyRepository companyRepository) {
+    public InjectingData(UserService userService, CompanyRepository companyRepository) {
         this.userService = userService;
-        this.authenticationService = authenticationService;
         this.companyRepository = companyRepository;
     }
 
-    @PostConstruct
+   /* @PostConstruct
     public void init() {
-        User testUser1 = new User();
+        *//*User testUser1 = new User();
         testUser1.setFirstName("Test");
         testUser1.setLastName("User");
         testUser1.setEmail("test@gmail.com");
@@ -37,7 +36,7 @@ public class InjectingData {
         testUser2.setPassword("1");
 
         authenticationService.register(testUser2.getFirstName(), testUser2.getLastName(), testUser2.getEmail(), testUser2.getPassword());
-
+*//*
         Company wogCompany = new Company();
         wogCompany.setName("WOG");
         wogCompany.setMapLink("https://wog.ua/ua/map/");
@@ -53,6 +52,6 @@ public class InjectingData {
         upgCompany.setHotLine("0800500064");
 
         companyRepository.save(upgCompany);
-    }
+    }*/
 }
 

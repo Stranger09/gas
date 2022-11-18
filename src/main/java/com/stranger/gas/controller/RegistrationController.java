@@ -1,4 +1,4 @@
-package com.stranger.gas.controller;
+/*package com.stranger.gas.controller;
 
 import com.stranger.gas.dto.UserRequestDto;
 import com.stranger.gas.security.AuthenticationService;
@@ -51,5 +51,5 @@ public class RegistrationController {
             return "redirect:/registration?success";
         }
     }
-}
+}*/
 
