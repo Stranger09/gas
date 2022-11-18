@@ -17,6 +17,4 @@ public interface Adapter {
     default List<Station> recoverCollectInfo(Exception e, String sql) {
         return Collections.emptyList();
     };
-
-
 }
