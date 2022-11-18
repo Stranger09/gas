@@ -1,41 +1,37 @@
 package com.stranger.gas.adapters;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stranger.gas.mapper.UpgMapper;
 import com.stranger.gas.model.Station;
 import com.stranger.gas.model.upg.UpgStation;
-import com.stranger.gas.scrapper.Scrapper;
+import com.stranger.gas.scrapper.impl.UpgScrapperImpl;
+import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Slf4j
-@EnableCaching
 @Component("upgAdapter")
+@AllArgsConstructor
 public class UpgAdapter implements Adapter {
 
-    private Scrapper scrapper;
-    private UpgMapper upgMapper;
-    private ObjectMapper objectMapper;
-
-    public UpgAdapter(@Qualifier("upgScrapper") Scrapper scrapper, UpgMapper upgMapper) {
-        this.scrapper = scrapper;
-        this.upgMapper = upgMapper;
-        this.objectMapper = new ObjectMapper();
-    }
+    private final UpgScrapperImpl scrapper;
+    private final UpgMapper upgMapper;
+    private final ObjectMapper objectMapper;
 
     @Override
     public List<Station> collectInfo() {
-        return getAllUpgStations()
-                .stream()
-                .map(upgStation -> upgMapper.mapStation(upgStation))
-                .collect(Collectors.toList());
+        return getAllUpgStations().stream().map(upgMapper::mapStation).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Station> recoverCollectInfo(Exception e, String sql) {
+        log.error("Wog adapter wasn't process data correctly");
+        return Adapter.super.recoverCollectInfo(e, sql);
     }
 
 
@@ -43,8 +39,6 @@ public class UpgAdapter implements Adapter {
     private List<UpgStation> getAllUpgStations() {
         String upgStationsInJson = (String) scrapper.retrieveStations();
 
-        List<UpgStation> upgStations = objectMapper.readValue(upgStationsInJson, new TypeReference<>() {
-        });
-        return upgStations;
+        return objectMapper.readValue(upgStationsInJson, new TypeReference<>() {});
     }
 }

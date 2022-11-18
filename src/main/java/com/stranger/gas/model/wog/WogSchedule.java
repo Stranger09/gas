@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Schedule {
+public class WogSchedule {
     String day;
     String interval;
 }
