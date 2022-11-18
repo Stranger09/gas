@@ -13,11 +13,15 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component("upgScrapper")
 public class UpgScrapperImpl implements Scrapper {
-    private static final String ALL_STATIONS_URL = "https://upg.ua/merezha_azk/";
+
+    @Value("${station.links.upg}")
+    private String UPG_STATIONS_URL;
+
     private static final String UPG_STATION_DATA_VARIABLE = "var objmap";
     private static final String SCRIPT_TAG = "script";
 
@@ -25,7 +29,7 @@ public class UpgScrapperImpl implements Scrapper {
     @SneakyThrows
     public Object retrieveStations() {
 
-        Connection connect = Jsoup.connect(ALL_STATIONS_URL);
+        Connection connect = Jsoup.connect(UPG_STATIONS_URL);
 
         Document doc = connect.get();
         Elements allElements = doc.getAllElements();

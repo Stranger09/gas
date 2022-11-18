@@ -4,6 +4,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stranger.gas.scrapper.WogScrapper;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -11,45 +15,50 @@ import java.util.Map;
 
 @Component("wogScrapper")
 public class WogScrapperImpl implements WogScrapper {
-    private static final String ALL_STATIONS_URL = "https://api.wog.ua/fuel_stations";
-    private RestTemplate restTemplate = new RestTemplate();
-    private ObjectMapper objectMapper = new ObjectMapper();
+
+    @Value("${station.links.wog}")
+    private String WOG_STATIONS_URL;
+    @Autowired
+    private RestTemplate restTemplate;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Override
     public Object retrieveStations() {
-        Object rawResponse = restTemplate.getForObject(ALL_STATIONS_URL, Object.class);
-        Object allStationsResponse = parseRowResponseToAllStationsResponse(rawResponse);
-        return allStationsResponse;
+        ResponseEntity<Object> rawResponse = restTemplate.getForEntity(WOG_STATIONS_URL, Object.class);
+
+        if (rawResponse.getStatusCode().is2xxSuccessful()) {
+            return parseRowResponseToAllStationsResponse(rawResponse.getBody());
+        }
+
+        return null;
     }
 
     @Override
     public Object retrieveStationInfo(final String station_url) {
         Object rawResponse = restTemplate.getForObject(station_url, Object.class);
-        Object stationInfoResponse = parseRowResponseToStationInfoResponse(rawResponse);
-        return stationInfoResponse;
+
+        return parseRowResponseToStationInfoResponse(rawResponse);
     }
 
     @Override
     public Object retrieveFuelFilters() {
-        Object rawResponse = restTemplate.getForObject(ALL_STATIONS_URL, Object.class);
-        Object allFuelFiltersResponse = parseRowResponseToAllFuelFiltersResponse(rawResponse);
-        return allFuelFiltersResponse;
+        Object rawResponse = restTemplate.getForObject(WOG_STATIONS_URL, Object.class);
+
+        return parseRowResponseToAllFuelFiltersResponse(rawResponse);
     }
 
     @SneakyThrows
     private Object parseRowResponseToAllStationsResponse(Object rawResponse) {
         Object dataResponse = getObject(rawResponse, "data");
 
-        Object allStationsResponse = getObject(dataResponse, "stations");
-
-        return allStationsResponse;
+        return getObject(dataResponse, "stations");
     }
 
     @SneakyThrows
     private Object parseRowResponseToStationInfoResponse(Object rawResponse) {
-        Object stationInfoResponse = getObject(rawResponse, "data");
 
-        return stationInfoResponse;
+        return getObject(rawResponse, "data");
     }
 
     @SneakyThrows
@@ -65,8 +74,7 @@ public class WogScrapperImpl implements WogScrapper {
     private Object getObject(Object objFromJson, String fieldInJson) {
         String json = objectMapper.writeValueAsString(objFromJson);
 
-        Map<String, Object> objectMap
-                = objectMapper.readValue(json, new TypeReference<>(){});
+        Map<String, Object> objectMap = objectMapper.readValue(json, new TypeReference<>(){});
 
         return objectMap.get(fieldInJson);
     }
