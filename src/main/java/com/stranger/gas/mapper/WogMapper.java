@@ -44,7 +44,8 @@ public class WogMapper {
         return StationInfo.builder()
             .lastUpdate(LocalDateTime.now())
             .workDescription(wogStationInfo.getWorkDescription())
-            .schedule(mapSchedule(wogStationInfo.getWogSchedule()))
+            .schedule(mapSchedule(wogStationInfo.getSchedule()))
+
             .fuels(mapFuelList(wogStationInfo.getFuels(), wogStationInfo.getWorkDescription()))
             .build();
     }
@@ -55,18 +56,19 @@ public class WogMapper {
             .collect(Collectors.toList());
     }
 
-    private String mapSchedule(List<WogSchedule> wogSchedule) {
-        return wogSchedule.stream()
-            .map(wogScheduleObj -> wogScheduleObj.getDay() + " " + wogScheduleObj.getInterval())
-            .findFirst()
-            .orElse("Розклад не вказано");
+
+    private String mapSchedule(List<WogSchedule> schedule) {
+        return schedule.stream()
+                .map(scheduleObj -> scheduleObj.getDay() + " " + scheduleObj.getInterval())
+                .findFirst()
+                .orElse("Розклад роботи для станції відсутній");
     }
 
     private String mapStationName(int id) {
         return BRAND_NAME + " " + id;
     }
 
-    Fuel mapFuel(WogFuel wogFuel, String workDescription) {
+    private Fuel mapFuel(WogFuel wogFuel, String workDescription) {
         return Fuel.builder()
             .name(mapFuelName(wogFuel.getName(), wogFuel.getBrand()))
             .price(mapFuelPrice(getFuelPrice(wogFuel.getId())))

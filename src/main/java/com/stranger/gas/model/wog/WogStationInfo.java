@@ -16,7 +16,7 @@ public class WogStationInfo {
     String city;
     String workDescription;
     List<WogFuel> fuels;
-    List<WogSchedule> wogSchedule;
+    List<WogSchedule> schedule;
     String name;
     int id;
 }
