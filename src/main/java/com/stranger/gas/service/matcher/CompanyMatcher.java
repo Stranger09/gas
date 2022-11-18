@@ -9,6 +9,6 @@ public class CompanyMatcher implements Matcher{
 
     @Override
     public boolean match(Station station, Filter filter) {
-        return station.getCompany().getName().equals(filter.getCompanyName());
+        return filter.getCompanyName() == null || station.getCompany().getName().equals(filter.getCompanyName());
     }
 }

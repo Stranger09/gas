@@ -9,6 +9,6 @@ public class CityMatcher implements Matcher{
 
     @Override
     public boolean match(Station station, Filter filter) {
-        return station.getCity().equals(filter.getCity());
+        return filter.getCity() == null || station.getCity().equals(filter.getCity());
     }
 }

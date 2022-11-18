@@ -14,8 +14,4 @@ public class WogFuelFilter {
     private String brand;
     private String name;
     private int id;
-
-    public WogFuelFilter(int price) {
-        this.price = price;
-    }
 }

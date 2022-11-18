@@ -1,19 +1,24 @@
 package com.stranger.gas.model;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-
-import javax.persistence.*;
 
 @Entity
 @Data
 @Builder
-@NoArgsConstructor
-@RequiredArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class Station {
 
     @Id
@@ -24,6 +29,14 @@ public class Station {
     private String name;
     private String address;
     private String city;
-    @OneToOne(cascade = {CascadeType.ALL})
+    @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     private StationInfo stationInfo;
+
+    public Station(Company company, String name, String address, String city, StationInfo stationInfo) {
+        this.company = company;
+        this.name = name;
+        this.address = address;
+        this.city = city;
+        this.stationInfo = stationInfo;
+    }
 }
