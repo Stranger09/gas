@@ -16,6 +16,7 @@ import org.checkerframework.common.aliasing.qual.Unique;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "usr")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
