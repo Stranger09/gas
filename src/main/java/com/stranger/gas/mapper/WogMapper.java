@@ -40,7 +40,6 @@ public class WogMapper {
             .build();
     }
 
-    //TODO Map lastUpdateField
     StationInfo mapStationInfo(WogStationInfo wogStationInfo) {
         return StationInfo.builder()
             .lastUpdate(LocalDateTime.now())
