@@ -30,7 +30,7 @@ public class UpgAdapter implements Adapter {
 
     @Override
     public List<Station> recoverCollectInfo(Exception e, String sql) {
-        log.error("Wog adapter wasn't process data correctly");
+        log.error("Upg adapter wasn't process data correctly");
         return Adapter.super.recoverCollectInfo(e, sql);
     }
 
