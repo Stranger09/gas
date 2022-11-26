@@ -26,9 +26,11 @@ public class StationController {
     }
 
     @SneakyThrows
-    @GetMapping(value = "/station/filter")
-    public List<Station> getStationsByCity(@RequestBody Filter filters) {
-        return filterService.filter(filters);
+    @PostMapping(value = "/station/filter")
+    public List<StationLine> getStationsByFilter(@RequestBody Filter filters) {
+
+        System.out.println(filters.toString());
+        return stationMapper.mapStationToStationLine(filterService.filter(filters));
     }
 
     @GetMapping(value = "/station")

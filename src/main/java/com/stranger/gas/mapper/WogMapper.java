@@ -96,7 +96,7 @@ public class WogMapper {
 
         int fuelDescriptionEndIndex = fuelDescription.indexOf(".");
 
-        if (fuelDescriptionEndIndex < fuelDescriptionStartIndex) {
+        if (fuelDescriptionEndIndex <= shortFuelName.length()) {
             return false;
         }
         String resultDescription = fuelDescription.substring(0, fuelDescriptionEndIndex).trim();

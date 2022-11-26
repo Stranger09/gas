@@ -1,7 +1,6 @@
 package com.stranger.gas.adapters;
 
 import com.stranger.gas.model.Station;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;

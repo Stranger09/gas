@@ -50,10 +50,12 @@ public class StationMapper {
 
         StringBuilder stringBuilder = new StringBuilder();
 
-        station.getStationInfo().getFuels().stream()
+        station.getStationInfo().getFuels()
+                .stream()
+                .filter(Fuel::isAvailable)
                 .forEach(fuel -> {
-                    stringBuilder.append(fuel.getName() + ": " + fuel.getPrice());
-                    stringBuilder.append(";");
+                    stringBuilder.append(fuel.getName() + " : " + fuel.getPrice());
+                    stringBuilder.append("\n");
                 });
         return stringBuilder.toString();
     }

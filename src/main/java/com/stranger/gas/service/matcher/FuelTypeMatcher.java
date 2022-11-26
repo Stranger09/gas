@@ -6,15 +6,16 @@ import com.stranger.gas.model.Station;
 import org.springframework.stereotype.Component;
 
 @Component
-public class FuelTypeMatcher implements Matcher{
+public class FuelTypeMatcher implements Matcher {
 
     @Override
     public boolean match(Station station, Filter filter) {
         return filter.getFuelType() == null
-            || station.getStationInfo()
-            .getFuels()
-            .stream()
-            .map(Fuel::getFuelType)
-            .anyMatch(fuelType -> fuelType.equals(filter.getFuelType()));
+                || station.getStationInfo()
+                .getFuels()
+                .stream()
+                .filter(Fuel::isAvailable)
+                .map(Fuel::getFuelType)
+                .anyMatch(fuelType -> fuelType.equals(filter.getFuelType()));
     }
 }
