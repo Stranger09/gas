@@ -2,3 +2,8 @@ station:
   links:
     wog: "https://api.wog.ua/fuel_stations"
     upg: "https://upg.ua/merezha_azk/"
+    brsm: "https://td4.brsm-nafta.com/api/v2/Mobile/get_full_ffs"
+
+fuel:
+  links:
+    brsm: "https://td4.brsm-nafta.com/api/v2/mobile/fuel_prices"

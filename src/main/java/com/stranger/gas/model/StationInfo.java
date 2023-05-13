@@ -24,5 +24,7 @@ public class StationInfo {
     //TODO Find a way not create duplicates of fuels for wog
     @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     private List<Fuel> fuels;
+    @ManyToMany(cascade = {CascadeType.ALL}/*, fetch = FetchType.EAGER*/)
+    private List<Service> services;
     private String lastUpdate;
 }

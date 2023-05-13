@@ -1,17 +1,16 @@
 package com.stranger.gas.mapper;
 
-import com.stranger.gas.model.Company;
-import com.stranger.gas.model.Fuel;
+import com.stranger.gas.model.*;
 import com.stranger.gas.model.Fuel.FuelType;
-import com.stranger.gas.model.Station;
-import com.stranger.gas.model.StationInfo;
 import com.stranger.gas.model.upg.UpgFuel;
+import com.stranger.gas.model.upg.UpgService;
 import com.stranger.gas.model.upg.UpgStation;
 import com.stranger.gas.repository.CompanyRepository;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,10 +24,12 @@ public class UpgMapper {
     private Company upgCompany;
     private CompanyRepository companyRepository;
     private UpgCityMap upgCityMap;
+    private UpgServiceMap upgServiceMap;
 
-    public UpgMapper(CompanyRepository companyRepository, UpgCityMap upgCityMap) {
+    public UpgMapper(CompanyRepository companyRepository, UpgCityMap upgCityMap, UpgServiceMap upgServiceMap) {
         this.companyRepository = companyRepository;
         this.upgCityMap = upgCityMap;
+        this.upgServiceMap = upgServiceMap;
     }
 
     public Station mapStation(UpgStation upgStation) {
@@ -37,6 +38,8 @@ public class UpgMapper {
                 .name(mapName(upgStation.getFullName()))
                 .address(upgStation.getAddress())
                 .city(mapCity(upgStation.getRegion()))
+                .lat(upgStation.getLatitude())
+                .lng(upgStation.getLongitude())
                 .stationInfo(mapStationInfo(upgStation))
                 .build();
     }
@@ -57,6 +60,7 @@ public class UpgMapper {
     private StationInfo mapStationInfo(UpgStation upgStation) {
         return StationInfo.builder()
                 .fuels(mapFuels(upgStation.getFuelsAsArray(), upgStation.isActive()))
+                .services(mapServices(upgStation.getServicesAsArray()))
                 .lastUpdate(LocalDateTime.now().format(formatter))
                 //TODO in station title work hours are sometimes
                 .schedule(mapSchedule(upgStation.isActive(), upgStation.getFullName()))
@@ -86,6 +90,23 @@ public class UpgMapper {
         return fuels.stream()
                 .map(upgFuel -> mapFuel(upgFuel, isActive))
                 .collect(Collectors.toList());
+    }
+
+    List<Service> mapServices(List<UpgService> services) {
+        if(services == null) {
+            return Collections.emptyList();
+        }
+        return services.stream()
+                .map(this::mapService)
+                .collect(Collectors.toList());
+    }
+
+    Service mapService(UpgService upgService) {
+        return Service.builder()
+                .name(upgService.getTitle())
+                .serviceType(mapServiceType(upgService.getTitle()))
+                .isAvailable(true)
+                .build();
     }
 
     Fuel mapFuel(UpgFuel upgFuel, boolean isActive) {
@@ -119,6 +140,10 @@ public class UpgMapper {
         }
 
         return fuelType;
+    }
+
+    private Service.ServiceType mapServiceType(String name) {
+        return upgServiceMap.getServiceNameToServiceType().get(name);
     }
 
     private Company getCompany() {

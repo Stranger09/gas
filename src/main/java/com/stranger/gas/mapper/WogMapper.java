@@ -1,14 +1,8 @@
 package com.stranger.gas.mapper;
 
-import com.stranger.gas.model.Company;
-import com.stranger.gas.model.Fuel;
+import com.stranger.gas.model.*;
 import com.stranger.gas.model.Fuel.FuelType;
-import com.stranger.gas.model.Station;
-import com.stranger.gas.model.StationInfo;
-import com.stranger.gas.model.wog.WogFuel;
-import com.stranger.gas.model.wog.WogFuelFilter;
-import com.stranger.gas.model.wog.WogSchedule;
-import com.stranger.gas.model.wog.WogStationInfo;
+import com.stranger.gas.model.wog.*;
 import com.stranger.gas.repository.CompanyRepository;
 import lombok.Data;
 import org.springframework.stereotype.Component;
@@ -28,11 +22,13 @@ public class WogMapper {
     private CompanyRepository companyRepository;
     private List<WogFuelFilter> fuelFilters;
     private WogShortNamesMap wogShortNamesMap;
+    private WogServiceMap wogServiceMap;
     public static final String BRAND_NAME = "WOG";
 
-    public WogMapper(CompanyRepository companyRepository, WogShortNamesMap wogShortNamesMap) {
+    public WogMapper(CompanyRepository companyRepository, WogShortNamesMap wogShortNamesMap, WogServiceMap wogServiceMap) {
         this.companyRepository = companyRepository;
         this.wogShortNamesMap = wogShortNamesMap;
+        this.wogServiceMap = wogServiceMap;
     }
 
     public Station mapStation(WogStationInfo wogStationInfo) {
@@ -41,6 +37,8 @@ public class WogMapper {
                 .name(mapStationName(wogStationInfo.getId()))
                 .address(wogStationInfo.getName())
                 .company(getCompany())
+                .lat(String.valueOf(wogStationInfo.getCoordinates().getLatitude()))
+                .lng(String.valueOf(wogStationInfo.getCoordinates().getLongitude()))
                 .stationInfo(mapStationInfo(wogStationInfo))
                 .build();
     }
@@ -51,9 +49,15 @@ public class WogMapper {
                 .lastUpdate(LocalDateTime.now().format(formatter))
                 .workDescription(wogStationInfo.getWorkDescription())
                 .schedule(mapSchedule(wogStationInfo.getSchedule()))
-
                 .fuels(mapFuelList(wogStationInfo.getFuels(), wogStationInfo.getWorkDescription()))
+                .services(mapServiceList(wogStationInfo.getServices()))
                 .build();
+    }
+
+    private List<Service> mapServiceList(List<WogService> services) {
+        return services.stream()
+                .map(this::mapService)
+                .collect(Collectors.toList());
     }
 
     private List<Fuel> mapFuelList(List<WogFuel> fuels, String workDescription) {
@@ -72,6 +76,14 @@ public class WogMapper {
 
     private String mapStationName(int id) {
         return BRAND_NAME + " " + id;
+    }
+
+    private Service mapService(WogService wogService) {
+        return Service.builder()
+                .name(wogService.getName())
+                .serviceType(mapServiceType(wogService.getIcon()))
+                .isAvailable(true)
+                .build();
     }
 
     private Fuel mapFuel(WogFuel wogFuel, String workDescription) {
@@ -153,6 +165,10 @@ public class WogMapper {
         }
 
         return fuelType;
+    }
+
+    private Service.ServiceType mapServiceType(String name) {
+        return wogServiceMap.getServiceNameToServiceType().get(name);
     }
 
     private Company getCompany() {

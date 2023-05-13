@@ -29,14 +29,18 @@ public class Station {
     private String name;
     private String address;
     private String city;
+    private String lat;
+    private String lng;
     @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     private StationInfo stationInfo;
 
-    public Station(Company company, String name, String address, String city, StationInfo stationInfo) {
+    public Station(Company company, String name, String address, String city, String lat, String lng, StationInfo stationInfo) {
         this.company = company;
         this.name = name;
         this.address = address;
         this.city = city;
+        this.lat = lat;
+        this.lng = lng;
         this.stationInfo = stationInfo;
     }
 }

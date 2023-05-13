@@ -23,10 +23,15 @@ public class UpgStation {
     public String address;
     @JsonProperty("Region")
     public String region;
+    @JsonProperty("Latitude")
+    public String latitude;
+    @JsonProperty("Longitude")
+    public String longitude;
     @JsonProperty("LastPriceUpdateDate")
     //2022-11-13
     public String lastPriceUpdateDate;
     @JsonProperty("FuelsAsArray")
     public List<UpgFuel> fuelsAsArray;
-
+    @JsonProperty("ServicesAsArray")
+    public List<UpgService> servicesAsArray;
 }

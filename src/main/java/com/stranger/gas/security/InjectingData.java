@@ -49,6 +49,15 @@ public class InjectingData {
         upgCompany.setHotLine("0800500064");
 
         companyRepository.save(upgCompany);
+
+        Company brsmCompany = new Company();
+
+        brsmCompany.setName("BRSM");
+        brsmCompany.setMapLink("https://brsm-nafta.com/map");
+        brsmCompany.setLinkName("brsm-nafta.com");
+        brsmCompany.setHotLine("0800303404");
+
+        companyRepository.save(brsmCompany);
     }
 }
 
