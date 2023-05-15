@@ -5,5 +5,4 @@ import com.stranger.gas.model.Station;
 
 public interface Matcher {
     boolean match(Station station, Filter filter);
-
 }

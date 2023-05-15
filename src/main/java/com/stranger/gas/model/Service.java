@@ -20,6 +20,7 @@ public class Service {
     @Enumerated(EnumType.STRING)
     private ServiceType serviceType;
     private String name;
+    @Column(length = 2555)
     private String description;
     private boolean isAvailable;
 

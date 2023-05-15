@@ -58,6 +58,15 @@ public class InjectingData {
         brsmCompany.setHotLine("0800303404");
 
         companyRepository.save(brsmCompany);
+
+        Company socarCompany = new Company();
+
+        socarCompany.setName("SOCAR");
+        socarCompany.setMapLink("https://socar.ua/map");
+        socarCompany.setLinkName("socar.ua");
+        socarCompany.setHotLine("0800508585");
+
+        companyRepository.save(socarCompany);
     }
 }
 

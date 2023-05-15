@@ -13,5 +13,6 @@ import lombok.NoArgsConstructor;
 public class Filter {
     String city;
     FuelType fuelType;
+    Service.ServiceType serviceType;
     String companyName;
 }

@@ -18,6 +18,8 @@ public class StationMapper {
                 .map(station -> {
                     return StationLine.builder()
                             .id(station.getId())
+                            .lat(station.getLat())
+                            .lng(station.getLng())
                             .city(station.getCity())
                             .address(station.getAddress())
                             .companyName(station.getCompany().getName())

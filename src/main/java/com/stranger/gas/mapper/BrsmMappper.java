@@ -48,7 +48,7 @@ public class BrsmMappper {
     }
 
     private String mapName(int id) {
-        return "АЗС №" + id;
+        return "BRSM №" + id;
     }
 
     private String mapAddress(String address, String building) {

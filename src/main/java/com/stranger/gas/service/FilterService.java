@@ -20,13 +20,6 @@ public class FilterService {
     @Autowired
     StationRepository stationRepository;
 
-
-//    @Scheduled(fixedDelay = 100)
-    private void method() {
-        List<Station> вінниця = filter(Filter.builder().city("Дніпро").build());
-        System.out.println("");
-    }
-
     public List<Station> filter(Filter filter) {
 
         List<Station> stations = stationRepository.findAll();
